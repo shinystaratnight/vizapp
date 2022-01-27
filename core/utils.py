@@ -1180,8 +1180,8 @@ def generate_figure(Serie1, Serie2, Serie3, Serie4, Fechas):
     Tipo2 = 'linea'  # Graph type
     Tipo3 = 'linea'  # Graph type
     Tipo4 = 'linea'  # Graph type
-    color_fondo = 'mintcream'  # Graph frame
-    color_area = 'mintcream'  # Plot area
+    color_fondo = 'lavender'  # Graph frame
+    color_area = 'white'  # Plot area
     color_linea1 = 'tomato'  # Color Serie1
     color_linea2 = 'royalblue'  # Color Serie2
     color_linea3 = 'gold'  # Color Serie3
