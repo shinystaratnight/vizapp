@@ -4,61 +4,54 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.conf import settings
 from core.utils import generate_figure
+from vizapp.forms import VizForm
+
 
 def home(request):
     context = {}
     if request.method == "POST":
-        if 'btnGenGraph' in request.POST:
-            context = generate_graph(request)
-        elif 'btnDlImage' in request.POST:
-            return download_graph(request)
-        else:
-            print("Download Data")
+        if 'btnDlExcel' in request.POST:
+            return download_excel(request)
+
+        form = VizForm(request.POST)
+        if form.is_valid():
+            serie1 = form.cleaned_data.get('serie1')
+            serie2 = form.cleaned_data.get('serie2')
+            serie3 = form.cleaned_data.get('serie3')
+            serie4 = form.cleaned_data.get('serie4')
+            fechas = form.fechas()
+
+            if 'btnGenGraph' in request.POST:
+                context['graph'] = \
+                    generate_graph(request, serie1, serie2, serie3, serie4, fechas)
+            elif 'btnDlImage' in request.POST:
+                return download_graph(request, serie1, serie2, serie3, serie4, fechas)
+            else:
+                print("Download Data")
+    else:
+        form = VizForm()
+    context['form'] = form
     return render(request, 'home.html', context)
 
 
-def generate_graph(request):
-    serie1 = request.POST.get('serie1', '')
-    serie2 = request.POST.get('serie2', '')
-    serie3 = request.POST.get('serie3', '')
-    serie4 = request.POST.get('serie4', '')
-    start = request.POST.get('datepicker1')
-    end = request.POST.get('datepicker2')
-
-    fig = generate_figure(serie1, serie2, serie3, serie4, "{}/{}".format(start, end))
-    imgdata = StringIO()
-    fig.savefig(imgdata, format='svg')
-    imgdata.seek(0)
-    graph = imgdata.getvalue()
-    context = {
-        "serie1": serie1,
-        "serie2": serie2,
-        "serie3": serie3,
-        "serie4": serie4,
-        "datepicker1": start,
-        "datepicker2": end,
-        "graph": graph
-    }
-    return context
+def generate_graph(request, serie1, serie2, serie3, serie4, fechas):
+    fig = generate_figure(serie1, serie2, serie3, serie4, fechas)
+    imgData = StringIO()
+    fig.savefig(imgData, format='svg')
+    imgData.seek(0)
+    graph = imgData.getvalue()
+    return graph
 
 
-def download_graph(request):
-    if request.method == "POST":
-        serie1 = request.POST.get('serie1', '')
-        serie2 = request.POST.get('serie2', '')
-        serie3 = request.POST.get('serie3', '')
-        serie4 = request.POST.get('serie4', '')
-        start = request.POST.get('datepicker1')
-        end = request.POST.get('datepicker2')
+def download_graph(request, serie1, serie2, serie3,serie4, fechas):
+    fig = generate_figure(serie1, serie2, serie3, serie4, fechas)
+    imgData = BytesIO()
+    fig.savefig(imgData, format='png')
+    imgData.seek(0)
 
-        fig = generate_figure(serie1, serie2, serie3, serie4, "{}/{}".format(start, end))
-        imgdata = BytesIO()
-        fig.savefig(imgdata, format='png')
-        imgdata.seek(0)
-
-        response = HttpResponse(imgdata, content_type='image/png')
-        response['Content-Disposition'] = 'attachment; filename=vizapp.png'
-        return response
+    response = HttpResponse(imgData, content_type='image/png')
+    response['Content-Disposition'] = 'attachment; filename=vizapp.png'
+    return response
 
 
 def download_excel(request):

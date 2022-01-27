@@ -4,35 +4,48 @@
         <h3 class="mx-auto mb-4">VizAPP Generator</h3>
         <form action="" method="post">
             {% csrf_token %}
-            <button type="button" class="btn btn-primary btn-dl-excel mb-4">Download Series List (Excel file)</button>
+            <button type="submit" name="btnDlExcel" class="btn btn-primary mb-4">Download Series List (Excel file)</button>
+        </form>
+
+        <form action="" method="post" novalidate>
+            {% csrf_token %}
             <div class="row">
                 <div class="col">
-                    <input type="text" class="form-control" name="serie1" placeholder="Input Serie1"
-                           value="{{ serie1 }}" required>
+                    {{ form.serie1 }}
+                    {% for error in form.serie1.errors %}
+                        <p class="text-danger">{{ error }}</p>
+                    {% endfor %}
                 </div>
                 <div class="col">
-                    <input type="text" class="form-control" name="serie2" placeholder="Input Serie2"
-                           value="{{ serie2 }}" required>
-                </div>
-            </div>
-            <div class="row mt-3">
-                <div class="col">
-                    <input type="text" class="form-control" name="serie3" placeholder="Input Serie3"
-                           value="{{ serie3 }}" required>
-                </div>
-                <div class="col">
-                    <input type="text" class="form-control" name="serie4" placeholder="Input Serie4"
-                            value="{{ serie4 }}">
+                    {{ form.serie2 }}
+                    {% for error in form.serie2.errors %}
+                        <p class="text-danger">{{ error }}</p>
+                    {% endfor %}
                 </div>
             </div>
             <div class="row mt-3">
                 <div class="col">
-                    <input type="text" class="form-control" name="datepicker1" id="datepicker1"
-                           placeholder="Pick the start date" value="{{ datepicker1 }}" required />
+                    {{ form.serie3 }}
+                    {% for error in form.serie3.errors %}
+                        <p class="text-danger">{{ error }}</p>
+                    {% endfor %}
                 </div>
                 <div class="col">
-                    <input type="text" class="form-control" name="datepicker2" id="datepicker2"
-                           placeholder="Pick the start date" value="{{ datepicker2 }}" required />
+                    {{ form.serie4 }}
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col">
+                    {{ form.datepicker1 }}
+                    {% for error in form.datepicker1.errors %}
+                        <p class="text-danger">{{ error }}</p>
+                    {% endfor %}
+                </div>
+                <div class="col">
+                    {{ form.datepicker2 }}
+                    {% for error in form.datepicker2.errors %}
+                        <p class="text-danger">{{ error }}</p>
+                    {% endfor %}
                 </div>
             </div>
             <div class="mt-3">
@@ -47,7 +60,7 @@
     </div>
     <script>
         $(function() {
-            $("#datepicker1, #datepicker2").datepicker({
+            $(".datepicker").datepicker({
                 dateFormat: "yy-mm"
             });
 
