@@ -1,15 +1,17 @@
 {% extends 'base.html' %}
 {% block content %}
-    <div class="container py-3">
-        <h3 class="mx-auto mb-4">VizAPP Generator</h3>
+    <div class="container py-5">
+        <h1 class="mb-5">VizAPP Generator</h1>
+        <h5>If you want to download the excel file, click on the button below.</h5>
         <form action="" method="post">
             {% csrf_token %}
             <button type="submit" name="btnDlExcel" class="btn btn-primary mb-4">Download Series List (Excel file)</button>
         </form>
 
+        <h5 class="mt-4">In order to generate/download the image, please input the codes and date range.</h5>
         <form action="" method="post" novalidate>
             {% csrf_token %}
-            <div class="row">
+            <div class="row mt-3">
                 <div class="col">
                     {{ form.serie1 }}
                     {% for error in form.serie1.errors %}
@@ -48,8 +50,8 @@
                     {% endfor %}
                 </div>
             </div>
-            <div class="mt-3">
-                <button type="submit" class="btn btn-primary" name="btnGenGraph">Generate Graph</button>
+            <div class="mt-4">
+                <button type="submit" class="btn btn-danger" name="btnGenGraph">Generate Graph</button>
                 <button type="submit" class="btn btn-success" name="btnDlImage">Download Image</button>
                 <button type="submit" class="btn btn-info" name="btnDlData">Download Data</button>
             </div>

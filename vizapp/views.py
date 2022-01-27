@@ -19,7 +19,7 @@ def home(request):
             serie2 = form.cleaned_data.get('serie2')
             serie3 = form.cleaned_data.get('serie3')
             serie4 = form.cleaned_data.get('serie4')
-            fechas = form.fechas()
+            fechas = form.get_fechas()
 
             if 'btnGenGraph' in request.POST:
                 context['graph'] = \
