@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
 {% block content %}
     <div class="container py-5">
-        <h1 class="mb-5">VizAPP Generator</h1>
-        <h5>If you want to download the excel file, click on the button below.</h5>
-        <form action="" method="post">
+        <h1 class="mb-5 text-center">OBSERVATORIO DE DATOS ECONÓMICOS</h1>
+        <h5 class="text-center">If you want to download the excel file, click on the button below.</h5>
+        <form action="" method="post" class="d-flex justify-content-center">
             {% csrf_token %}
-            <button type="submit" name="btnDlExcel" class="btn btn-primary mb-4">Download Series List (Excel file)</button>
+            <button type="submit" name="btnDlExcel" class="btn btn-primary btn-lg mb-4">Download Series List (Excel file)</button>
         </form>
 
-        <h5 class="mt-4">In order to generate/download the image, please input the codes and date range.</h5>
+        <h5 class="mt-4 text-center">In order to generate/download the image, please input the codes and date range.</h5>
         <form action="" method="post" novalidate>
             {% csrf_token %}
             <div class="row mt-3">
@@ -50,10 +50,10 @@
                     {% endfor %}
                 </div>
             </div>
-            <div class="mt-4">
+            <div class="mt-4 d-flex justify-content-center">
                 <button type="submit" class="btn btn-danger" name="btnGenGraph">Generate Graph</button>
-                <button type="submit" class="btn btn-success" name="btnDlImage">Download Image</button>
-                <button type="submit" class="btn btn-info" name="btnDlData">Download Data</button>
+                <button type="submit" class="btn btn-success ml-3" name="btnDlImage">Download Image</button>
+                <button type="submit" class="btn btn-info ml-3" name="btnDlData">Download Data</button>
             </div>
         </form>
         <div class="my-5 d-flex justify-content-center">

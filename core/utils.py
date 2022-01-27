@@ -1198,3 +1198,221 @@ def generate_figure(Serie1, Serie2, Serie3, Serie4, Fechas):
                          Eje_secundario2, Eje_secundario3, Eje_secundario4, Cambiar_eje1, Mostrar_titulo,
                          Cambiar_Nombre1, Cambiar_Nombre2, Cambiar_Nombre3, Cambiar_Nombre4)
     return fig
+
+
+def generate_data(Serie1, Serie2, Serie3, Serie4, periodo):
+    nombres_series = get_nombres_series()
+    if Serie1 == '':
+        print("\033[1;31m" + 'Introduzca Serie1')
+    else:
+        ''
+        # Revisando si series son correctas
+    if len(nombres_series[nombres_series.index == Serie1]) == 0:
+        print("\033[1;31m" + 'Introduzca una Serie1 válida')
+    else:
+        ''
+    if (Serie2 != '') & (len(nombres_series[nombres_series.index == Serie2]) == 0):
+        print("\033[1;31m" + 'Introduzca una Serie2 válida')
+    else:
+        ''
+    if (Serie3 != '') & (len(nombres_series[nombres_series.index == Serie3]) == 0):
+        print("\033[1;31m" + 'Introduzca una Serie3 válida')
+    else:
+        ''
+    if (Serie4 != '') & (len(nombres_series[nombres_series.index == Serie4]) == 0):
+        print("\033[1;31m" + 'Introduzca una Serie4 válida')
+    else:
+        ''
+        # Generando codigo final para busqueda
+    if Serie2 == '':
+        final = Serie1
+    elif Serie3 == '':
+        final = Serie1 + '-' + Serie2
+    elif Serie4 == '':
+        final = Serie1 + '-' + Serie2 + '-' + Serie3
+    else:
+        final = Serie1 + '-' + Serie2 + '-' + Serie3 + '-' + Serie4
+    url = 'https://estadisticas.bcrp.gob.pe/estadisticas/series/api/{}/json/{}'.format(final, periodo)
+    data = requests.get(url)
+    data = data.json()
+    periodos = data.get("periods")
+
+    price_index = []
+    for i in periodos:
+        valores_list1 = i['values'][
+            0]  # Modificado para que se puedan transformar los n.d en np.nam, original: [i['values'][0]]
+        price_index.append(valores_list1)
+
+    if len(final) > 9:
+        if nombres_series.at[Serie1, 'Frecuencia'] != nombres_series.at[Serie2, 'Frecuencia']:
+            print("\033[1;31m" + 'Elija series con las mismas frecuencias')
+        else:
+            ''
+        price_index2 = []
+        for i in periodos:
+            valores_list2 = i['values'][1]
+            price_index2.append(valores_list2)
+    else:
+        price_index2 = price_index
+
+    if len(final) > 19:
+        if nombres_series.at[Serie2, 'Frecuencia'] != nombres_series.at[Serie3, 'Frecuencia']:
+            print("\033[1;31m" + 'Elija series con las mismas frecuencias')
+        else:
+            ''
+        price_index3 = []
+        for i in periodos:
+            valores_list3 = i['values'][2]
+            price_index3.append(valores_list3)
+    else:
+        price_index3 = price_index
+
+    if len(final) > 29:
+        if nombres_series.at[Serie3, 'Frecuencia'] != nombres_series.at[Serie4, 'Frecuencia']:
+            print("\033[1;31m" + 'Elija series con las mismas frecuencias')
+        else:
+            ''
+        price_index4 = []
+        for i in periodos:
+            valores_list4 = i['values'][3]
+            price_index4.append(valores_list4)
+    else:
+        price_index4 = price_index
+
+    fechas = []
+    for i in periodos:
+        nombres = i['name']
+        fechas.append(nombres)
+
+    # ORDENAR SERIES
+
+    if len(final) == 9:
+        diccionario = {"Fechas": fechas, "Serie1": price_index}
+    elif len(final) == 19:
+        if Serie1 < Serie2:
+            diccionario = {"Fechas": fechas, "Serie1": price_index, "Serie2": price_index2}
+        else:
+            diccionario = {"Fechas": fechas, "Serie2": price_index, "Serie1": price_index2}
+    elif len(final) == 29:
+        if (Serie1 < Serie2) & (Serie1 < Serie3) & (Serie2 < Serie3):
+            diccionario = {"Fechas": fechas, "Serie1": price_index, "Serie2": price_index2, "Serie3": price_index3}
+        elif (Serie1 > Serie2) & (Serie1 < Serie3) & (Serie2 < Serie3):
+            diccionario = {"Fechas": fechas, "Serie2": price_index, "Serie1": price_index2, "Serie3": price_index3}
+        elif (Serie1 > Serie2) & (Serie1 > Serie3) & (Serie2 < Serie3):
+            diccionario = {"Fechas": fechas, "Serie2": price_index, "Serie3": price_index2, "Serie1": price_index3}
+        elif (Serie1 > Serie2) & (Serie1 > Serie3) & (Serie2 > Serie3):
+            diccionario = {"Fechas": fechas, "Serie3": price_index, "Serie2": price_index2, "Serie1": price_index3}
+        elif (Serie1 < Serie2) & (Serie1 < Serie3) & (Serie2 > Serie3):
+            diccionario = {"Fechas": fechas, "Serie1": price_index, "Serie3": price_index2, "Serie2": price_index3}
+        elif (Serie1 < Serie2) & (Serie1 > Serie3) & (Serie2 > Serie3):
+            diccionario = {"Fechas": fechas, "Serie3": price_index, "Serie1": price_index2, "Serie2": price_index3}
+        else:
+            ''
+    else:
+        if (Serie1 < Serie2) & (Serie1 < Serie3) & (Serie1 < Serie4) & (Serie2 < Serie3) & (Serie2 < Serie4) & (
+                Serie3 < Serie4):
+            diccionario = {"Fechas": fechas, "Serie1": price_index, "Serie2": price_index2, "Serie3": price_index3,
+                           "Serie4": price_index4}
+        elif (Serie1 < Serie2) & (Serie1 < Serie3) & (Serie1 < Serie4) & (Serie2 < Serie3) & (Serie2 < Serie4) & (
+                Serie4 < Serie3):
+            diccionario = {"Fechas": fechas, "Serie1": price_index, "Serie2": price_index2, "Serie4": price_index3,
+                           "Serie3": price_index4}
+        elif (Serie1 < Serie2) & (Serie1 < Serie3) & (Serie1 < Serie4) & (Serie3 < Serie2) & (Serie2 < Serie4) & (
+                Serie3 < Serie4):
+            diccionario = {"Fechas": fechas, "Serie1": price_index, "Serie3": price_index2, "Serie2": price_index3,
+                           "Serie4": price_index4}
+        elif (Serie1 < Serie2) & (Serie1 < Serie3) & (Serie1 < Serie4) & (Serie3 < Serie2) & (Serie4 < Serie2) & (
+                Serie3 < Serie4):
+            diccionario = {"Fechas": fechas, "Serie1": price_index, "Serie3": price_index2, "Serie4": price_index3,
+                           "Serie2": price_index4}
+        elif (Serie1 < Serie2) & (Serie1 < Serie3) & (Serie1 < Serie4) & (Serie2 < Serie3) & (Serie4 < Serie2) & (
+                Serie4 < Serie3):
+            diccionario = {"Fechas": fechas, "Serie1": price_index, "Serie4": price_index2, "Serie2": price_index3,
+                           "Serie3": price_index4}
+        elif (Serie1 < Serie2) & (Serie1 < Serie3) & (Serie1 < Serie4) & (Serie3 < Serie2) & (Serie4 < Serie2) & (
+                Serie4 < Serie3):
+            diccionario = {"Fechas": fechas, "Serie1": price_index, "Serie4": price_index2, "Serie3": price_index3,
+                           "Serie2": price_index4}
+        elif (Serie2 < Serie1) & (Serie1 < Serie3) & (Serie1 < Serie4) & (Serie2 < Serie3) & (Serie2 < Serie4) & (
+                Serie3 < Serie4):
+            diccionario = {"Fechas": fechas, "Serie2": price_index, "Serie1": price_index2, "Serie3": price_index3,
+                           "Serie4": price_index4}
+        elif (Serie2 < Serie1) & (Serie1 < Serie3) & (Serie1 < Serie4) & (Serie2 < Serie3) & (Serie2 < Serie4) & (
+                Serie4 < Serie3):
+            diccionario = {"Fechas": fechas, "Serie2": price_index, "Serie1": price_index2, "Serie4": price_index3,
+                           "Serie3": price_index4}
+        elif (Serie2 < Serie1) & (Serie3 < Serie1) & (Serie1 < Serie4) & (Serie2 < Serie3) & (Serie2 < Serie4) & (
+                Serie3 < Serie4):
+            diccionario = {"Fechas": fechas, "Serie2": price_index, "Serie3": price_index2, "Serie1": price_index3,
+                           "Serie4": price_index4}
+        elif (Serie2 < Serie1) & (Serie3 < Serie1) & (Serie4 < Serie1) & (Serie2 < Serie3) & (Serie2 < Serie4) & (
+                Serie3 < Serie4):
+            diccionario = {"Fechas": fechas, "Serie2": price_index, "Serie3": price_index2, "Serie4": price_index3,
+                           "Serie1": price_index4}
+        elif (Serie2 < Serie1) & (Serie1 < Serie3) & (Serie4 < Serie1) & (Serie2 < Serie3) & (Serie2 < Serie4) & (
+                Serie4 < Serie3):
+            diccionario = {"Fechas": fechas, "Serie2": price_index, "Serie4": price_index2, "Serie1": price_index3,
+                           "Serie3": price_index4}
+        elif (Serie2 < Serie1) & (Serie3 < Serie1) & (Serie4 < Serie1) & (Serie2 < Serie3) & (Serie2 < Serie4) & (
+                Serie4 < Serie3):
+            diccionario = {"Fechas": fechas, "Serie2": price_index, "Serie4": price_index2, "Serie3": price_index3,
+                           "Serie1": price_index4}
+        elif (Serie1 < Serie2) & (Serie3 < Serie1) & (Serie1 < Serie4) & (Serie3 < Serie2) & (Serie2 < Serie4) & (
+                Serie3 < Serie4):
+            diccionario = {"Fechas": fechas, "Serie3": price_index, "Serie1": price_index2, "Serie2": price_index3,
+                           "Serie4": price_index4}
+        elif (Serie1 < Serie2) & (Serie3 < Serie1) & (Serie1 < Serie4) & (Serie3 < Serie2) & (Serie4 < Serie2) & (
+                Serie3 < Serie4):
+            diccionario = {"Fechas": fechas, "Serie3": price_index, "Serie1": price_index2, "Serie4": price_index3,
+                           "Serie2": price_index4}
+        elif (Serie2 < Serie1) & (Serie3 < Serie1) & (Serie1 < Serie4) & (Serie3 < Serie2) & (Serie2 < Serie4) & (
+                Serie3 < Serie4):
+            diccionario = {"Fechas": fechas, "Serie3": price_index, "Serie2": price_index2, "Serie1": price_index3,
+                           "Serie4": price_index4}
+        elif (Serie2 < Serie1) & (Serie3 < Serie1) & (Serie4 < Serie1) & (Serie3 < Serie2) & (Serie2 < Serie4) & (
+                Serie3 < Serie4):
+            diccionario = {"Fechas": fechas, "Serie3": price_index, "Serie2": price_index2, "Serie4": price_index3,
+                           "Serie1": price_index4}
+        elif (Serie1 < Serie2) & (Serie3 < Serie1) & (Serie4 < Serie1) & (Serie3 < Serie2) & (Serie4 < Serie2) & (
+                Serie3 < Serie4):
+            diccionario = {"Fechas": fechas, "Serie3": price_index, "Serie4": price_index2, "Serie1": price_index3,
+                           "Serie2": price_index4}
+        elif (Serie2 < Serie1) & (Serie3 < Serie1) & (Serie4 < Serie1) & (Serie3 < Serie2) & (Serie4 < Serie2) & (
+                Serie3 < Serie4):
+            diccionario = {"Fechas": fechas, "Serie3": price_index, "Serie4": price_index2, "Serie2": price_index3,
+                           "Serie1": price_index4}
+        elif (Serie1 < Serie2) & (Serie1 < Serie3) & (Serie4 < Serie1) & (Serie2 < Serie3) & (Serie4 < Serie2) & (
+                Serie4 < Serie3):
+            diccionario = {"Fechas": fechas, "Serie4": price_index, "Serie1": price_index2, "Serie2": price_index3,
+                           "Serie3": price_index4}
+        elif (Serie1 < Serie2) & (Serie1 < Serie3) & (Serie4 < Serie1) & (Serie3 < Serie2) & (Serie4 < Serie2) & (
+                Serie4 < Serie3):
+            diccionario = {"Fechas": fechas, "Serie4": price_index, "Serie1": price_index2, "Serie3": price_index3,
+                           "Serie2": price_index4}
+        elif (Serie2 < Serie1) & (Serie1 < Serie3) & (Serie4 < Serie1) & (Serie2 < Serie3) & (Serie4 < Serie2) & (
+                Serie4 < Serie3):
+            diccionario = {"Fechas": fechas, "Serie4": price_index, "Serie2": price_index2, "Serie1": price_index3,
+                           "Serie3": price_index4}
+        elif (Serie2 < Serie1) & (Serie3 < Serie1) & (Serie4 < Serie1) & (Serie2 < Serie3) & (Serie4 < Serie2) & (
+                Serie4 < Serie3):
+            diccionario = {"Fechas": fechas, "Serie4": price_index, "Serie2": price_index2, "Serie3": price_index3,
+                           "Serie1": price_index4}
+        elif (Serie1 < Serie2) & (Serie3 < Serie1) & (Serie4 < Serie1) & (Serie3 < Serie2) & (Serie4 < Serie2) & (
+                Serie4 < Serie3):
+            diccionario = {"Fechas": fechas, "Serie4": price_index, "Serie3": price_index2, "Serie1": price_index3,
+                           "Serie2": price_index4}
+        elif (Serie2 < Serie1) & (Serie3 < Serie1) & (Serie4 < Serie1) & (Serie3 < Serie2) & (Serie4 < Serie2) & (
+                Serie4 < Serie3):
+            diccionario = {"Fechas": fechas, "Serie4": price_index, "Serie3": price_index2, "Serie2": price_index3,
+                           "Serie1": price_index4}
+        else:
+            ''
+
+    df = pd.DataFrame(diccionario)
+
+    df.set_index('Fechas', inplace=True)
+    df = df.replace('n.d.', str(np.nan), regex=True).astype(float)
+    # df.to_excel('Data.xlsx')
+    # df = df.to_excel('Data.xlsx')
+
+    return df

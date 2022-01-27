@@ -36,6 +36,6 @@ class VizForm(forms.Form):
                                       'placeholder': 'End Date',
                                   }))
 
-    def get_fechas(self):
+    def get_periodo(self):
         return "{}/{}".format(self.cleaned_data.get('datepicker1'),
                               self.cleaned_data.get('datepicker2'))
