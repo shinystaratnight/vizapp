@@ -4,7 +4,7 @@
         <h3 class="mx-auto mb-4">VizAPP Generator</h3>
         <form action="" method="post">
             {% csrf_token %}
-            <button type="button" class="btn btn-primary mb-4">Download Series List (Excel file)</button>
+            <button type="button" class="btn btn-primary btn-dl-excel mb-4">Download Series List (Excel file)</button>
             <div class="row">
                 <div class="col">
                     <input type="text" class="form-control" name="serie1" placeholder="Input Serie1"
@@ -41,24 +41,54 @@
                 <button type="button" class="btn btn-info btn-dl-data">Download Data</button>
             </div>
         </form>
-
-        <div class="mt-5">
+        <div class="mt-5 d-flex justify-content-center">
             {{ graph|safe }}
         </div>
     </div>
     <script>
         $(function() {
+
+            function validate() {
+                var serie1 = $("form input[name='serie1']").val();
+                if (serie1 === null || serie1.trim() === "") return false;
+
+                var serie2 = $("form input[name='serie2']").val();
+                if (serie2 === null || serie2.trim() === "") return false;
+
+                var serie3 = $("form input[name='serie3']").val();
+                if (serie3 === null || serie3.trim() === "") return false;
+
+                var datepicker1 = $("form input[name='datepicker1']").val();
+                if (datepicker1 === null || datepicker1.trim() === "") return false;
+
+                var datepicker2 = $("form input[name='datepicker2']").val();
+                if (datepicker2 === null || datepicker2.trim() === "") return false;
+
+                return true;
+            }
+
             $("#datepicker1, #datepicker2").datepicker({
                 dateFormat: "yy-mm"
             });
 
+            $("button.btn-dl-excel").click( function (e) {
+                $('form').attr('action', "{% url 'vizapp:download-excel' %}");
+                $('form').submit();
+            });
+
             $("button.btn-gen-graph").click( function (e) {
+                var validated = validate();
+                if (!validated) return false;
+
                 $('form').attr('action', "{% url 'vizapp:home' %}");
                 $('form').submit();
             });
 
             $("button.btn-dl-graph").click( function (e) {
-                $('form').attr('action', "{% url 'vizapp:download' %}");
+                var validated = validate();
+                if (!validated) return false;
+
+                $('form').attr('action', "{% url 'vizapp:download-graph' %}");
                 $('form').submit();
             });
         });

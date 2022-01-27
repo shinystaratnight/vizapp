@@ -1,7 +1,10 @@
+import os
 from io import StringIO, BytesIO
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.conf import settings
 from core.utils import generate_figure
+import pandas as pd
 
 def home(request):
     context = {}
@@ -28,10 +31,10 @@ def home(request):
             "datepicker2": end,
             "graph": graph
         }
-
     return render(request, 'home.html', context)
 
-def download(request):
+
+def download_graph(request):
     if request.method == "POST":
         serie1 = request.POST.get('serie1', '')
         serie2 = request.POST.get('serie2', '')
@@ -49,3 +52,14 @@ def download(request):
         response['Content-Disposition'] = 'attachment; filename=vizapp.png'
         return response
 
+
+def download_excel(request):
+    path = os.path.join(settings.STATIC_ROOT, 'Nombres Series Easyviz.xlsx')
+    if os.path.exists(path):
+        with open(path, 'rb') as excel:
+            data = excel.read()
+        response = HttpResponse(data, content_type="application/ms-excel")
+        response['Content-Disposition'] = 'attachment; filename=Nombres Series Easyviz.xlsx'
+        return response
+    else:
+        return
