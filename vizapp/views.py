@@ -37,7 +37,7 @@ def home(request):
 def generate_graph(request, serie1, serie2, serie3, serie4, periodo):
     fig = generate_figure(serie1, serie2, serie3, serie4, periodo)
     imgData = StringIO()
-    fig.savefig(imgData, format='svg')
+    fig.savefig(imgData, format='svg', bbox_inches="tight")
     imgData.seek(0)
     graph = imgData.getvalue()
     return graph
