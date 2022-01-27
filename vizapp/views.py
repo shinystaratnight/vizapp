@@ -6,6 +6,7 @@ from django.conf import settings
 from core.utils import generate_figure, generate_data
 from vizapp.forms import VizForm
 import pandas as pd
+import seaborn as sns
 
 
 def home(request):
@@ -22,20 +23,46 @@ def home(request):
             serie4 = form.cleaned_data.get('serie4')
             periodo = form.get_periodo()
 
+            Eje_secundario2 = form.cleaned_data.get("Eje_secundario2")
+            Eje_secundario3 = form.cleaned_data.get("Eje_secundario3")
+            Eje_secundario4 = form.cleaned_data.get("Eje_secundario4")
+
+            color_linea1 = form.cleaned_data.get("color_linea1")
+            color_linea2 = form.cleaned_data.get("color_linea2")
+            color_linea3 = form.cleaned_data.get("color_linea3")
+            color_linea4 = form.cleaned_data.get("color_linea4")
+
+            Tipo1 = form.cleaned_data.get("Tipo1")
+            Tipo2 = form.cleaned_data.get("Tipo2")
+            Tipo3 = form.cleaned_data.get("Tipo3")
+            Tipo4 = form.cleaned_data.get("Tipo4")
+
             if 'btnGenGraph' in request.POST:
-                context['graph'] = generate_graph(request, serie1, serie2, serie3, serie4, periodo)
+                context['graph'] = generate_graph(request, serie1, serie2, serie3, serie4, periodo,
+                          Eje_secundario2, Eje_secundario3, Eje_secundario4,
+                          color_linea1, color_linea2, color_linea3, color_linea4,
+                          Tipo1, Tipo2, Tipo3, Tipo4)
             elif 'btnDlImage' in request.POST:
-                return download_graph(request, serie1, serie2, serie3, serie4, periodo)
+                return download_graph(request, serie1, serie2, serie3, serie4, periodo,
+                          Eje_secundario2, Eje_secundario3, Eje_secundario4,
+                          color_linea1, color_linea2, color_linea3, color_linea4,
+                          Tipo1, Tipo2, Tipo3, Tipo4)
             else:
-                return download_data(request, serie1, serie2, serie3, serie4, periodo)
+                return download_data(request, serie1, serie2, serie3, serie4, periodo,
+                         Eje_secundario2, Eje_secundario3, Eje_secundario4,
+                         color_linea1, color_linea2, color_linea3, color_linea4,
+                         Tipo1, Tipo2, Tipo3, Tipo4)
     else:
         form = VizForm()
     context['form'] = form
     return render(request, 'home.html', context)
 
 
-def generate_graph(request, serie1, serie2, serie3, serie4, periodo):
-    fig = generate_figure(serie1, serie2, serie3, serie4, periodo)
+def generate_graph(request, serie1, serie2, serie3, serie4, periodo,Eje_secundario2, Eje_secundario3, Eje_secundario4,
+                          color_linea1, color_linea2, color_linea3, color_linea4, Tipo1, Tipo2, Tipo3, Tipo4):
+    sns.set_style('darkgrid')
+    fig = generate_figure(serie1, serie2, serie3, serie4, periodo, Eje_secundario2, Eje_secundario3, Eje_secundario4,
+                          color_linea1, color_linea2, color_linea3, color_linea4, Tipo1, Tipo2, Tipo3, Tipo4)
     imgData = StringIO()
     fig.savefig(imgData, format='svg', bbox_inches="tight")
     imgData.seek(0)
@@ -43,10 +70,13 @@ def generate_graph(request, serie1, serie2, serie3, serie4, periodo):
     return graph
 
 
-def download_graph(request, serie1, serie2, serie3, serie4, periodo):
-    fig = generate_figure(serie1, serie2, serie3, serie4, periodo)
+def download_graph(request, serie1, serie2, serie3, serie4, periodo, Eje_secundario2, Eje_secundario3, Eje_secundario4,
+                          color_linea1, color_linea2, color_linea3, color_linea4, Tipo1, Tipo2, Tipo3, Tipo4):
+    sns.set_style('darkgrid')
+    fig = generate_figure(serie1, serie2, serie3, serie4, periodo, Eje_secundario2, Eje_secundario3, Eje_secundario4,
+                          color_linea1, color_linea2, color_linea3, color_linea4, Tipo1, Tipo2, Tipo3, Tipo4)
     imgData = BytesIO()
-    fig.savefig(imgData, format='png')
+    fig.savefig(imgData, format='png', bbox_inches="tight")
     imgData.seek(0)
 
     response = HttpResponse(imgData, content_type='image/png')
@@ -54,8 +84,10 @@ def download_graph(request, serie1, serie2, serie3, serie4, periodo):
     return response
 
 
-def download_data(request, serie1, serie2, serie3, serie4, periodo):
-    df = generate_data(serie1, serie2, serie3, serie4, periodo)
+def download_data(request, serie1, serie2, serie3, serie4, periodo, Eje_secundario2, Eje_secundario3, Eje_secundario4,
+                          color_linea1, color_linea2, color_linea3, color_linea4, Tipo1, Tipo2, Tipo3, Tipo4):
+    df = generate_data(serie1, serie2, serie3, serie4, periodo, Eje_secundario2, Eje_secundario3, Eje_secundario4,
+                          color_linea1, color_linea2, color_linea3, color_linea4, Tipo1, Tipo2, Tipo3, Tipo4)
     excel_file = BytesIO()
     xlwriter = pd.ExcelWriter(excel_file, engine='xlsxwriter')
     df.to_excel(xlwriter, 'Sheet1')

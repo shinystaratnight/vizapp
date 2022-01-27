@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-    <div class="container py-5">
+    <div class="container pt-5 pb-2">
         <h1 class="mb-5 text-center">OBSERVATORIO DE DATOS ECONÓMICOS</h1>
         <h5 class="text-center">If you want to download the excel file, click on the button below.</h5>
         <form action="" method="post" class="d-flex justify-content-center">
@@ -11,52 +11,198 @@
         <h5 class="mt-4 text-center">In order to generate/download the image, please input the codes and date range.</h5>
         <form action="" method="post" novalidate>
             {% csrf_token %}
-            <div class="row mt-3">
+            <div class="row">
                 <div class="col">
-                    {{ form.serie1 }}
-                    {% for error in form.serie1.errors %}
-                        <p class="text-danger">{{ error }}</p>
-                    {% endfor %}
+                    <div class="form-group">
+                        <label>Serie1</label>
+                        {{ form.serie1 }}
+                        {% for error in form.serie1.errors %}
+                            <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+
                 </div>
                 <div class="col">
-                    {{ form.serie2 }}
-                    {% for error in form.serie2.errors %}
-                        <p class="text-danger">{{ error }}</p>
-                    {% endfor %}
-                </div>
-            </div>
-            <div class="row mt-3">
-                <div class="col">
-                    {{ form.serie3 }}
-                    {% for error in form.serie3.errors %}
-                        <p class="text-danger">{{ error }}</p>
-                    {% endfor %}
-                </div>
-                <div class="col">
-                    {{ form.serie4 }}
+                    <div class="form-group">
+                        <label>Serie2</label>
+                        {{ form.serie2 }}
+                    </div>
                 </div>
             </div>
-            <div class="row mt-3">
+            <div class="row">
                 <div class="col">
-                    {{ form.datepicker1 }}
-                    {% for error in form.datepicker1.errors %}
-                        <p class="text-danger">{{ error }}</p>
-                    {% endfor %}
+                    <div class="form-group">
+                        <label>Serie3</label>
+                        {{ form.serie3 }}
+                    </div>
                 </div>
                 <div class="col">
-                    {{ form.datepicker2 }}
-                    {% for error in form.datepicker2.errors %}
-                        <p class="text-danger">{{ error }}</p>
-                    {% endfor %}
+                    <div class="form-group">
+                        <label>Serie4</label>
+                        {{ form.serie4 }}
+                    </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label>Start Date</label>
+                        {{ form.datepicker1 }}
+                        {% for error in form.datepicker1.errors %}
+                            <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label>End Date</label>
+                        {{ form.datepicker2 }}
+                        {% for error in form.datepicker2.errors %}
+                            <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-5">
+                <div class="col">
+                    <h5 class="text-center">Serie1 Options</h5>
+                </div>
+                <div class="col">
+                    <h5 class="text-center">Serie2 Options</h5>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label>Right Axis</label>
+                        <input type="text" value="No" class="form-control" disabled>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label>Right Axis</label>
+                        {{ form.Eje_secundario2 }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label>Graph type</label>
+                        {{ form.Tipo1 }}
+                        {% for error in form.Tipo1.errors %}
+                            <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label>Graph type</label>
+                        {{ form.Tipo2 }}
+                        {% for error in form.Tipo2.errors %}
+                            <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label>Color</label>
+                        {{ form.color_linea1 }}
+                        {% for error in form.color_linea1.errors %}
+                            <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label>Color</label>
+                        {{ form.color_linea2 }}
+                        {% for error in form.color_linea2.errors %}
+                            <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-5">
+                <div class="col">
+                    <h5 class="text-center">Serie3 Options</h5>
+                </div>
+                <div class="col">
+                    <h5 class="text-center">Serie4 Options</h5>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label>Right Axis</label>
+                        {{ form.Eje_secundario3 }}
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label>Right Axis</label>
+                        {{ form.Eje_secundario4 }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label>Graph type</label>
+                        {{ form.Tipo3 }}
+                        {% for error in form.Tipo3.errors %}
+                            <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label>Graph type</label>
+                        {{ form.Tipo4 }}
+                        {% for error in form.Tipo4.errors %}
+                            <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label>Color</label>
+                        {{ form.color_linea3 }}
+                        {% for error in form.color_linea3.errors %}
+                            <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label>Color</label>
+                        {{ form.color_linea4 }}
+                        {% for error in form.color_linea4.errors %}
+                            <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
             <div class="mt-4 d-flex justify-content-center">
                 <button type="submit" class="btn btn-danger" name="btnGenGraph">Generate Graph</button>
                 <button type="submit" class="btn btn-success ml-3" name="btnDlImage">Download Image</button>
                 <button type="submit" class="btn btn-info ml-3" name="btnDlData">Download Data</button>
             </div>
         </form>
-        <div class="my-5 d-flex justify-content-center">
+        <div class="my-3 d-flex justify-content-center">
             {{ graph|safe }}
         </div>
     </div>
