@@ -5,6 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import ticker
 from django.conf import settings
+from io import StringIO
 
 
 def get_nombres_series():
@@ -1143,4 +1144,9 @@ def consulta_bcr3(Serie1, Serie2, Serie3, Serie4, periodo, tipo1, tipo2, tipo3, 
     else:
         ''
 
-    return [fig, ax]
+    imgdata = StringIO()
+    fig.savefig(imgdata, format='svg')
+    imgdata.seek(0)
+
+    data = imgdata.getvalue()
+    return data
