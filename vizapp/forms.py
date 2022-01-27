@@ -26,6 +26,32 @@ class VizForm(forms.Form):
                              }),
                              required=False)
 
+    datepicker1 = forms.DateField(label='Start Date',
+                                  input_formats=["%Y-%m", "%Y", "%Y-%m-%d"],
+                                  widget=forms.TextInput(attrs={
+                                      'class': 'form-control datepicker',
+                                  }))
+    datepicker2 = forms.DateField(label='End Date',
+                                  input_formats=["%Y-%m", "%Y", "%Y-%m-%d"],
+                                  widget=forms.TextInput(attrs={
+                                      'class': 'form-control datepicker',
+                                  }))
+
+    color_fondo = forms.CharField(label='color_fondo', max_length=20,
+                                 widget=forms.TextInput(attrs={
+                                     'class': 'form-control',
+                                 }))
+
+    Marcar_recesiones = forms.CharField(label='Marcar_recesiones',
+                                      widget=forms.Select(
+                                      choices=AXIS_CHOICES,
+                                      attrs={'class': 'form-control'}))
+
+    Linea_cero = forms.CharField(label='Linea_cero',
+                                      widget=forms.Select(
+                                      choices=AXIS_CHOICES,
+                                      attrs={'class': 'form-control'}))
+
     Eje_secundario2 = forms.CharField(label='Eje_secundario2',
                                      widget=forms.Select(
                                          choices=AXIS_CHOICES,
@@ -72,16 +98,6 @@ class VizForm(forms.Form):
                                 'class': 'form-control',
                             }))
 
-    datepicker1 = forms.DateField(label='Start Date',
-                                  input_formats=["%Y-%m", "%Y", "%Y-%m-%d"],
-                                  widget=forms.TextInput(attrs={
-                                      'class': 'form-control datepicker',
-                                  }))
-    datepicker2 = forms.DateField(label='End Date',
-                                  input_formats=["%Y-%m", "%Y", "%Y-%m-%d"],
-                                  widget=forms.TextInput(attrs={
-                                      'class': 'form-control datepicker',
-                                  }))
 
     def get_periodo(self):
         return "{}/{}".format(self.cleaned_data.get('datepicker1'),

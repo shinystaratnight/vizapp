@@ -1146,7 +1146,8 @@ def consulta_bcr3(Serie1, Serie2, Serie3, Serie4, periodo, tipo1, tipo2, tipo3, 
     return fig
 
 
-def generate_figure(Serie1, Serie2, Serie3, Serie4, Fechas, Eje_secundario2, Eje_secundario3, Eje_secundario4,
+def generate_figure(Serie1, Serie2, Serie3, Serie4, Fechas, color_fondo, Marcar_recesiones, Linea_cero,
+                    Eje_secundario2, Eje_secundario3, Eje_secundario4,
           color_linea1, color_linea2, color_linea3, color_linea4, Tipo1, Tipo2, Tipo3, Tipo4):
     # Serie1 = 'PN01660XM'
     # Serie2 = 'PN01654XM'
@@ -1181,16 +1182,16 @@ def generate_figure(Serie1, Serie2, Serie3, Serie4, Fechas, Eje_secundario2, Eje
     # Tipo2 = 'linea'  # Graph type
     # Tipo3 = 'linea'  # Graph type
     # Tipo4 = 'linea'  # Graph type
-    color_fondo = 'lavender'  # Graph frame
+    # color_fondo = 'lavender'  # Graph frame
     color_area = 'white'  # Plot area
     # color_linea1 = 'tomato'  # Color Serie1
     # color_linea2 = 'royalblue'  # Color Serie2
     # color_linea3 = 'gold'  # Color Serie3
     # color_linea4 = 'limegreen'  # Color Serie4
     Cambiar_eje1 = ''  # Change Y axis name
-    Marcar_recesiones = 'Si'  # Recession shading
+    # Marcar_recesiones = 'Si'  # Recession shading
     Mostrar_titulo = 'Si'  # Show title
-    Linea_cero = 'No'  # Line in zero
+    # Linea_cero = 'No'  # Line in zero
 
     fig = consulta_bcr3(Serie1, Serie2, Serie3, Serie4, Fechas, Tipo1, Tipo2, Tipo3, Tipo4, color_fondo, color_area,
                          color_linea1, color_linea2, color_linea3, color_linea4, Modificar_Serie1, Operacion1,

@@ -44,7 +44,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col">
+                <div class="col-3">
                     <div class="form-group">
                         <label>Start Date</label>
                         {{ form.datepicker1 }}
@@ -53,13 +53,37 @@
                         {% endfor %}
                     </div>
                 </div>
-                <div class="col">
+                <div class="col-3">
                     <div class="form-group">
                         <label>End Date</label>
                         {{ form.datepicker2 }}
                         {% for error in form.datepicker2.errors %}
                             <p class="text-danger">{{ error }}</p>
                         {% endfor %}
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label>Graph Frame Color</label>
+                        {{ form.color_fondo }}
+                        {% for error in form.color_fondo.errors %}
+                            <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label>Recession shading</label>
+                        {{ form.Marcar_recesiones }}
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label>Line in zero</label>
+                        {{ form.Linea_cero }}
                     </div>
                 </div>
             </div>
