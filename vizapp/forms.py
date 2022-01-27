@@ -24,13 +24,13 @@ class VizForm(forms.Form):
                              required=False)
 
     datepicker1 = forms.DateField(label='Start Date',
-                                  input_formats=["%Y-%m"],
+                                  input_formats=["%Y-%m", "%Y", "%Y-%m-%d"],
                                   widget=forms.TextInput(attrs={
                                       'class': 'form-control datepicker',
                                       'placeholder': 'Start Date',
                                   }))
     datepicker2 = forms.DateField(label='End Date',
-                                  input_formats=["%Y-%m"],
+                                  input_formats=["%Y-%m", "%Y", "%Y-%m-%d"],
                                   widget=forms.TextInput(attrs={
                                       'class': 'form-control datepicker',
                                       'placeholder': 'End Date',
